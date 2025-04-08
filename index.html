@@ -1,1 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CynoLog - Suivi d'entraînement cynophile</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+      background-color: #f2f2f2;
+    }
+    h1 {
+      color: #2c3e50;
+    }
+    form, table {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+    label, input, select {
+      display: block;
+      margin: 10px 0;
+    }
+    input, select {
+      padding: 5px;
+      width: 100%;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+    th {
+      background-color: #3498db;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>CynoLog - Suivi d'entraînement cynophile</h1>
+
+  <form id="training-form">
+    <label for="date">Date :</label>
+    <input type="date" id="date" required />
+
+    <label for="chien">Nom du chien :</label>
+    <input type="text" id="chien" required />
+
+    <label for="exercice">Exercice :</label>
+    <input type="text" id="exercice" required />
+
+    <label for="note">Note (1 à 5) :</label>
+    <select id="note" required>
+      <option value="">--Choisir--</option>
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+      <option>5</option>
+    </select>
+
+    <button type="submit">Ajouter</button>
+  </form>
+
+  <table id="log-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Chien</th>
+        <th>Exercice</th>
+        <th>Note</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const form = document.getElementById("training-form");
+    const tableBody = document.querySelector("#log-table tbody");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const date = document.getElementById("date").value;
+      const chien = document.getElementById("chien").value;
+      const exercice = document.getElementById("exercice").value;
+      const note = document.getElementById("note").value;
+
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${date}</td><td>${chien}</td><td>${exercice}</td><td>${note}</td>`;
+      tableBody.appendChild(row);
+
+      form.reset();
+    });
+  </script>
+</body>
+</html>
 <!DOCTYPE html><html><head><title>Suivi Cynophile</title></head><body><h1>App de suivi en construction</h1></body></html>

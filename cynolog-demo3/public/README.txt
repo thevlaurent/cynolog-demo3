@@ -1,1 +1,0 @@
-Dossier public pour les images, icônes, etc.

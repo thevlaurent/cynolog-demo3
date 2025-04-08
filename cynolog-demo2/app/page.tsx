@@ -1,0 +1,1 @@
+export default function Home() { return <main className="p-4 text-center text-xl">Bienvenue sur <strong>CynoLog</strong></main>; }

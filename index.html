@@ -1,104 +1,113 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CynoLog - Suivi d'entraînement cynophile</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 30px;
-      background-color: #f2f2f2;
-    }
-    h1 {
-      color: #2c3e50;
-    }
-    form, table {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      margin-top: 20px;
-    }
-    label, input, select {
-      display: block;
-      margin: 10px 0;
-    }
-    input, select {
-      padding: 5px;
-      width: 100%;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      padding: 10px;
-      border: 1px solid #ddd;
-    }
-    th {
-      background-color: #3498db;
-      color: white;
-    }
-  </style>
-</head>
-<body>
-  <h1>CynoLog - Suivi d'entraînement cynophile</h1>
+<html>
+  <head>
+    <title>Suivi Cynophile</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      h1 {
+        color: #2c3e50;
+      }
+      input, select {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 8px;
+      }
+      button {
+        padding: 8px 16px;
+        cursor: pointer;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th, td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: left;
+      }
+      th {
+        background-color: #3498db;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>CynoLog - Suivi d'entraînement cynophile</h1>
 
-  <form id="training-form">
-    <label for="date">Date :</label>
-    <input type="date" id="date" required />
+    <div>
+      <label>Date :</label>
+      <input type="date" id="date" />
 
-    <label for="chien">Nom du chien :</label>
-    <input type="text" id="chien" required />
+      <label>Nom du chien :</label>
+      <input type="text" id="chien" />
 
-    <label for="exercice">Exercice :</label>
-    <input type="text" id="exercice" required />
+      <label>Exercice :</label>
+      <input type="text" id="exercice" />
 
-    <label for="note">Note (1 à 5) :</label>
-    <select id="note" required>
-      <option value="">--Choisir--</option>
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-      <option>5</option>
-    </select>
+      <label>Note (1 à 5) :</label>
+      <select id="note">
+        <option value="">--Choisir--</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
 
-    <button type="submit">Ajouter</button>
-  </form>
+      <button onclick="ajouterSeance()">Ajouter</button>
+    </div>
 
-  <table id="log-table">
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Chien</th>
-        <th>Exercice</th>
-        <th>Note</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Chien</th>
+          <th>Exercice</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody id="liste"></tbody>
+    </table>
 
-  <script>
-    const form = document.getElementById("training-form");
-    const tableBody = document.querySelector("#log-table tbody");
+    <script>
+      let donnees = JSON.parse(localStorage.getItem("cynolog")) || [];
 
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      const date = document.getElementById("date").value;
-      const chien = document.getElementById("chien").value;
-      const exercice = document.getElementById("exercice").value;
-      const note = document.getElementById("note").value;
+      function enregistrer() {
+        localStorage.setItem("cynolog", JSON.stringify(donnees));
+      }
 
-      const row = document.createElement("tr");
-      row.innerHTML = `<td>${date}</td><td>${chien}</td><td>${exercice}</td><td>${note}</td>`;
-      tableBody.appendChild(row);
+      function afficher() {
+        const tbody = document.getElementById("liste");
+        tbody.innerHTML = "";
+        donnees.forEach((d) => {
+          const row = `<tr>
+            <td>${d.date}</td>
+            <td>${d.chien}</td>
+            <td>${d.exercice}</td>
+            <td>${d.note}</td>
+          </tr>`;
+          tbody.innerHTML += row;
+        });
+      }
 
-      form.reset();
-    });
-  </script>
-</body>
-</html>
-<!DOCTYPE html><html><head><title>Suivi Cynophile</title></head><body><h1>App de suivi en construction</h1></body></html>
+      function ajouterSeance() {
+        const date = document.getElementById("date").value;
+        const chien = document.getElementById("chien").value;
+        const exercice = document.getElementById("exercice").value;
+        const note = document.getElementById("note").value;
+
+        if (!date || !chien || !exercice || !note) {
+          alert("Veuillez remplir tous les champs !");
+          return;
+        }
+
+        donnees.push({ date, chien, exercice, note });
+        enregistrer();
+        afficher();
+
+        // Réinitialiser les champs
+        document.getElementById("date").value = "";
